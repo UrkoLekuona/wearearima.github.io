@@ -9,9 +9,44 @@
   <meta name="keywords" content="{{ page.tags }}">
   {% endif %}
 
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@{{ site.twitter_username }}">
+  <meta name="twitter:creator" content="@{{ page.author }}">
+  <meta name="twitter:title"   content="{{ page.title }}">
+
+  {% if page.summary %}
+  <meta name="twitter:description" content="{{ page.summary }}">
+  {% else %}
+  <meta name="twitter:description" content="{{ site.description }}">
+  {% endif %}
+
+  {% if page.header-image %}
+  <meta name="twitter:card"  content="summary_large_image">
+  <meta name="twitter:image" content="{{ site.url }}/assets/images/{{ page.header-image }}">
+  {% else %}
+  <meta name="twitter:card"  content="summary">
+  <!-- This line might need a fix too, something like {{ site.url }}/assets/images/{{ site.title_image }} -->
+  <meta name="twitter:image" content="{{ site.title_image }}">
+  {% endif %}
+  <!-- end of Twitter cards -->
+
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ "/feed.xml" | relative_url }}">
+
+  <!-- SEO Recipes (http://polyglot.untra.io/seo/) -->
+  <meta http-equiv="Content-Language" content="{{site.data.languages[site.active_lang].lang}}">
+  <link rel="alternate"
+      hreflang="{{site.data.languages[site.default_lang].lang}}"
+      href="{{site.url}}{{page.permalink}}" />
+  {% for lang in site.languages %}
+  {% if lang == site.default_lang %}
+    {% continue %}
+  {% endif %}
+  <link rel="alternate"
+      hreflang="{{lang}}"
+      href="{{site.url}}/{{site.data.languages[lang].lang}}{{page.permalink}}" />
+  {% endfor %}
 
   {% if jekyll.environment == 'production' and site.google_analytics %}
   {% include google-analytics.html %}
